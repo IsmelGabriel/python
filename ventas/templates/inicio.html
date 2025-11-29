@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio</title>
+</head>
+<body>
+    <h1>Bienvenido al Sistema de Gestión de Ventas</h1>
+
+    <a href="/productos">Ver productos</a><br>
+    <a href="/ventas">Ver ventas</a>
+
+    <div class="content-card">
+        <table border="1" cellpadding="10">
+            <thead>
+                <tr>
+                    <th>ID Venta</th>
+                    <th>Cliente</th>
+                    <th>Fecha de Venta</th>
+                    <th>Total de Venta</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for venta in ventas %}
+                <tr>
+                    <td>{{ venta.id_venta }}</td>
+                    <td>{{ venta.id_cliente.nombre }}</td>
+                    <td>{{ venta.fecha_venta }}</td>
+                    <td>{{ venta.total_venta }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+</body>
+</html>
