@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle venta</title>
+</head>
+<body>
+    <style>
+        body {
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .content-card {
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 0 auto;
+            max-width: 600px;
+            font-family: Arial, sans-serif;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        p {
+            font-size: 16px;
+            color: #555;
+            margin: 10px 0;
+        }
+
+        strong {
+            color: #333;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #f0f2f5;
+            background-color: #007BFF;
+            padding: 10px 15px;
+            border-radius: 8px ;
+        }
+
+        a:hover {
+            text-decoration: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .table-items {
+            font-weight: bold;
+            color: #222;
+        }
+
+        .table-info {
+            color: #555;
+        }
+
+
+    </style>
+
+    <div class="content-card">
+        <h2>Detalle de la Venta</h2>
+        
+        <p><strong>ID de Venta:</strong> {{ venta.id_venta }}</p>
+        <p><strong>Usuario:</strong> {{ venta.id_usuario.nombre }}</p>
+        <p><strong>Fecha de Venta:</strong> {{ venta.fecha_venta }}</p>
+        <p><strong>Total de la Venta:</strong> ${{ venta.total_venta }}</p>
+        
+        <h3>Producto Comprados:</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th class="table-items">Producto</th>
+                    <th class="table-items">Cantidad</th>
+                    <th class="table-items">Precio Unitario</th>
+                    <th class="table-items">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for detalle in detalles %}
+                <tr>
+                    <td class="table-info">{{ detalle.id_producto.nombre_producto }}</td>
+                    <td class="table-info">{{ detalle.cantidad }}</td>
+                    <td class="table-info">${{ detalle.precio_unitario }}</td>
+                    <td class="table-info">${{ detalle.subtotal }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <a href="{% url 'ventas' %}">Volver</a>
+    </div>
+</body>
+</html>

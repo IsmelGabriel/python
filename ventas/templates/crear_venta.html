@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear venta</title>
+</head>
+<body>
+    <style>
+        body {
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .content-card {
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 0 auto;
+            max-width: 600px;
+            font-family: Arial, sans-serif;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        form label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        form input[type="text"],
+        form input[type="number"],
+        form select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        form input[type="submit"] {
+            margin-top: 15px;
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        form a {
+            margin-top: 15px;
+            background-color: #8f2d2d;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        form a:hover {
+            background-color: #5c1a1a;
+        }
+    </style>
+
+    <div class="content-card">
+        <h2>Crear Nueva Venta</h2>
+        
+        {% if error %}
+        <div style="background-color: #f8d7da; color: #721c24; padding: 12px; border-radius: 4px; margin-bottom: 20px; border: 1px solid #f5c6cb;">
+            ⚠️ {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="POST" action="{% url 'agregar_venta' %}">
+            {% csrf_token %}
+            <label for="usuario">Usuario:</label>
+            <select id="usuario" name="usuario" required>
+                <option value="">-- Seleccionar Usuario --</option>
+                {% for usuario in usuarios %}
+                    <option value="{{ usuario.id }}">{{ usuario.nombre }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="producto">Producto:</label>
+            <select id="producto" name="producto" required onchange="actualizarStock()">
+                <option value="">-- Seleccionar Producto --</option>
+                {% for producto in productos %}
+                    <option value="{{ producto.id_producto }}" data-precio="{{ producto.precio }}" data-stock="{{ producto.stock }}">
+                        {{ producto.nombre_producto }} - ${{ producto.precio }} (Stock: {{ producto.stock }})
+                    </option>
+                {% endfor %}
+            </select>
+
+            <label for="stock_disponible">Stock Disponible:</label>
+            <input type="text" id="stock_disponible" name="stock_disponible" value="0" readonly>
+
+            <label for="cantidad">Cantidad:</label>
+            <input type="number" id="cantidad" name="cantidad" min="1" value="1" required onchange="validarCantidad()">
+
+            <label for="precio_unitario">Precio Unitario:</label>
+            <input type="text" id="precio_unitario" name="precio_unitario" value="0.00" readonly>
+
+            <label for="total">Total a pagar:</label>
+            <input type="text" id="total" name="total" value="0.00" readonly>
+
+            <input type="submit" value="Crear Venta">
+            <a href="{% url 'ventas' %}">Cancelar</a>
+        </form>
+    </div>
+
+    <script>
+        const productoSelect = document.getElementById('producto');
+        const cantidadInput = document.getElementById('cantidad');
+        const stockDisponibleInput = document.getElementById('stock_disponible');
+        const precioUnitarioInput = document.getElementById('precio_unitario');
+        const totalInput = document.getElementById('total');
+
+        function actualizarStock() {
+            const selectedOption = productoSelect.options[productoSelect.selectedIndex];
+            const stock = parseInt(selectedOption.getAttribute('data-stock')) || 0;
+            const precio = parseFloat(selectedOption.getAttribute('data-precio')) || 0;
+            
+            stockDisponibleInput.value = stock;
+            precioUnitarioInput.value = precio.toFixed(2);
+            cantidadInput.value = 1;
+            cantidadInput.max = stock;
+            calcularTotal();
+        }
+
+        function validarCantidad() {
+            const stock = parseInt(stockDisponibleInput.value) || 0;
+            const cantidad = parseInt(cantidadInput.value) || 0;
+            
+            if (cantidad > stock) {
+                cantidadInput.value = stock;
+                alert(`No hay suficiente stock. Máximo disponible: ${stock}`);
+            }
+            calcularTotal();
+        }
+
+        function calcularTotal() {
+            const precio = parseFloat(precioUnitarioInput.value) || 0;
+            const cantidad = parseInt(cantidadInput.value) || 0;
+            const total = precio * cantidad;
+            totalInput.value = total.toFixed(2);
+        }
+
+        // Inicializar cuando carga la página
+        if (productoSelect.value) {
+            actualizarStock();
+        }
+
+        // Eventos
+        productoSelect.addEventListener('change', actualizarStock);
+        cantidadInput.addEventListener('input', validarCantidad);
+    </script>
+</body>
+</html>

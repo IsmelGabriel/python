@@ -1,10 +1,12 @@
 from django.db import models
+from django.utils import timezone
 
 # Create your models here.
 class Usuario(models.Model):
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=50)
-    password = models.CharField(max_length=255)
+    email = models.CharField(max_length=255)
+    password = models.CharField(max_length=100 )
 
     def __str__(self):
         return self.nombre
@@ -12,8 +14,10 @@ class Usuario(models.Model):
 
 class Producto(models.Model):
     id_producto = models.AutoField(primary_key=True)
+    id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null=True, blank=True)
     nombre_producto = models.CharField(max_length=100)
     precio = models.DecimalField(max_digits=10, decimal_places=2)
+    stock = models.IntegerField(default=0)
 
     def __str__(self):
         return self.nombre_producto
@@ -21,8 +25,9 @@ class Producto(models.Model):
 
 class Venta(models.Model):
     id_venta = models.AutoField(primary_key=True)
-    id_cliente = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    fecha_venta = models.DateTimeField(auto_now_add=True)
+    id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null=True, blank=True)
+    id_producto = models.ForeignKey(Producto, on_delete=models.CASCADE, null=True, blank=True)
+    fecha_venta = models.DateTimeField(default=timezone.now)
     total_venta = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
@@ -31,8 +36,8 @@ class Venta(models.Model):
 
 class DetalleVenta(models.Model):
     id_detalle = models.AutoField(primary_key=True)
-    id_venta = models.ForeignKey(Venta, on_delete=models.CASCADE, related_name="detalles")
-    id_producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    id_venta = models.ForeignKey(Venta, on_delete=models.CASCADE, null=True, blank=True)
+    id_producto = models.ForeignKey(Producto, on_delete=models.CASCADE, null=True, blank=True)
     cantidad = models.IntegerField()
     precio_unitario = models.DecimalField(max_digits=10, decimal_places=2)
     subtotal = models.DecimalField(max_digits=10, decimal_places=2)

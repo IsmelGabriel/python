@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ventas</title>
+    <title>Usuarios</title>
 </head>
 
 <body>
@@ -112,30 +112,27 @@
 
     <div class="content-card">
         <div class="opciones">
-            <a href="{% url 'agregar_producto' %}" class="opciones-item">Nuevo producto</a>
+            <a href="{% url 'agregar_usuario' %}">Nuevo Usuario</a>
         </div>
-        <h2>Lista de Productos</h2>
+        <h2>Lista de Usuarios</h2>
         <table>
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>Nombre</th>
-                    <th>Precio</th>
-                    <th>Stock</th>
+                    <th>Email</th>
                 </tr>
             </thead>
             <tbody>
-                {% for producto in productos %}
+                {% for usuario in usuarios %}
                 <tr>
-                    <td>{{ producto.id_producto }}</td>
-                    <td>{{ producto.nombre_producto }}</td>
-                    <td>{{ producto.precio }}</td>
-                    <td>{{ producto.stock }}</td>
+                    <td>{{ usuario.id }}</td>
+                    <td>{{ usuario.nombre }}</td>
+                    <td>{{ usuario.email }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-    </div>
 
 </body>
 
