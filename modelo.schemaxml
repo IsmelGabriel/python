@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemadesigner version="6.5">
+<source>
+<database charset="utf8mb4" collation="utf8mb4_general_ci">gestion_ventas</database>
+</source>
+<canvas zoom="100">
+<tables>
+<table name="ventas_detalleventa" view="colnames">
+<left>0</left>
+<top>0</top>
+<width>131</width>
+<height>180</height>
+<sql_create_table>CREATE TABLE `ventas_detalleventa` (
+  `id_detalle` int(11) NOT NULL AUTO_INCREMENT,
+  `cantidad` int(11) NOT NULL,
+  `precio_unitario` decimal(10,2) NOT NULL,
+  `subtotal` decimal(10,2) NOT NULL,
+  `id_producto_id` int(11) DEFAULT NULL,
+  `id_venta_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id_detalle`),
+  KEY `ventas_detalleventa_id_producto_id_901cf687_fk_ventas_pr` (`id_producto_id`),
+  KEY `ventas_detalleventa_id_venta_id_55c94b1a_fk_ventas_ve` (`id_venta_id`),
+  CONSTRAINT `ventas_detalleventa_id_producto_id_901cf687_fk_ventas_pr` FOREIGN KEY (`id_producto_id`) REFERENCES `ventas_producto` (`id_producto`),
+  CONSTRAINT `ventas_detalleventa_id_venta_id_55c94b1a_fk_ventas_ve` FOREIGN KEY (`id_venta_id`) REFERENCES `ventas_venta` (`id_venta`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci</sql_create_table>
+</table>
+<table name="ventas_producto" view="colnames">
+<left>136</left>
+<top>0</top>
+<width>147</width>
+<height>163</height>
+<sql_create_table>CREATE TABLE `ventas_producto` (
+  `id_producto` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre_producto` varchar(100) NOT NULL,
+  `precio` decimal(10,2) NOT NULL,
+  `stock` int(11) NOT NULL,
+  `id_usuario_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id_producto`),
+  KEY `ventas_producto_id_usuario_id_4d35f773_fk_ventas_usuario_id` (`id_usuario_id`),
+  CONSTRAINT `ventas_producto_id_usuario_id_4d35f773_fk_ventas_usuario_id` FOREIGN KEY (`id_usuario_id`) REFERENCES `ventas_usuario` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci</sql_create_table>
+</table>
+<table name="ventas_usuario" view="colnames">
+<left>288</left>
+<top>0</top>
+<width>100</width>
+<height>146</height>
+<sql_create_table>CREATE TABLE `ventas_usuario` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(50) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci</sql_create_table>
+</table>
+<table name="ventas_venta" view="colnames">
+<left>393</left>
+<top>0</top>
+<width>130</width>
+<height>163</height>
+<sql_create_table>CREATE TABLE `ventas_venta` (
+  `id_venta` int(11) NOT NULL AUTO_INCREMENT,
+  `fecha_venta` datetime(6) NOT NULL DEFAULT current_timestamp(6),
+  `total_venta` decimal(10,2) NOT NULL,
+  `id_usuario_id` int(11) DEFAULT NULL,
+  `id_producto_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id_venta`),
+  KEY `ventas_venta_id_usuario_id_3dfb99f4_fk_ventas_usuario_id` (`id_usuario_id`),
+  KEY `ventas_venta_id_producto_id_296a964e_fk_ventas_pr` (`id_producto_id`),
+  CONSTRAINT `ventas_venta_id_producto_id_296a964e_fk_ventas_pr` FOREIGN KEY (`id_producto_id`) REFERENCES `ventas_producto` (`id_producto`),
+  CONSTRAINT `ventas_venta_id_usuario_id_3dfb99f4_fk_ventas_usuario_id` FOREIGN KEY (`id_usuario_id`) REFERENCES `ventas_usuario` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci</sql_create_table>
+</table>
+</tables>
+</canvas>
+</schemadesigner>
