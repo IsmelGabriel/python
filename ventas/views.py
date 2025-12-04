@@ -78,6 +78,11 @@ def usuarios(request):
 
 
 def agregar_producto(request):
+    try:
+        if not request.session['usuario']:
+            return redirect('index')
+    except KeyError:
+        return redirect('index')
     if request.method == "POST":
         nombre_producto = request.POST.get("nombre")
         precio = request.POST.get("precio")
@@ -89,6 +94,11 @@ def agregar_producto(request):
 
 
 def agregar_venta(request):
+    try:
+        if not request.session['usuario']:
+            return redirect('index')
+    except KeyError:
+        return redirect('index')
     if request.method == "POST":
         id_usuario = request.POST.get("usuario")
         id_producto = request.POST.get("producto")
@@ -147,6 +157,11 @@ def agregar_venta(request):
 
 
 def detalle_venta(request, venta_id):
+    try:
+        if not request.session['usuario']:
+            return redirect('index')
+    except KeyError:
+        return redirect('index')
     try:
         venta = Venta.objects.get(id_venta=venta_id)
         detalles = DetalleVenta.objects.filter(id_venta=venta)
